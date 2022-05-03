@@ -30,7 +30,7 @@ const queryCreateMeetingTable = `CREATE TABLE Meeting(
 const queryCreateRoomTable = `CREATE TABLE Room(
   room_no SMALLINT, 
   room_name VARCHAR(30), 
-  floor_number SMALLINT
+  floor_number TINYINT
 );`;
 
 const queryInsertIntoInvitee = `INSERT INTO Invitee (
