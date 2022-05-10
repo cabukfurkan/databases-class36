@@ -1,0 +1,20 @@
+{
+  "name": "week2",
+  "version": "1.0.0",
+  "description": "## Agenda",
+  "main": "async-create-insert.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "github:mysqljs/mysql",
+    "util": "^0.12.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
