@@ -7,23 +7,23 @@ export const selectAuthorsAndTheirMentors = `
     ON authors.mentor = mentors.author_no;`
 
 export const selectAuthorsAndTheirPaperTitle = `
-    SELECT authors.*, paper_title
+    SELECT authors.author_name, paper_title
     FROM authors
-    LEFT JOIN research_PapersAndAuthors ON (authors.author_no = research_PapersAndAuthors.author_no)
-    LEFT JOIN research_Papers ON (research_Papers.paper_id=research_PapersAndAuthors.paper_id)`
+    LEFT JOIN research_PapersAndAuthors ON authors.author_no = research_PapersAndAuthors.author_no
+    LEFT JOIN research_Papers ON research_Papers.paper_id=research_PapersAndAuthors.paper_id`
 
 export const selectPapersAndTheNumbersOfAuthors = `SELECT paper_title AS 'Paper Title',
     COUNT(research_Papers.paper_title) AS 'Number of Authors' 
     FROM authors 
-    JOIN research_PapersAndAuthors ON (authors.author_no = research_PapersAndAuthors.author_no)
-    JOIN research_Papers ON (research_Papers.paper_id = research_PapersAndAuthors.paper_id)
+    JOIN research_PapersAndAuthors ON authors.author_no = research_PapersAndAuthors.author_no
+    JOIN research_Papers ON research_Papers.paper_id = research_PapersAndAuthors.paper_id
     GROUP BY research_Papers.paper_title;`
 
 export const selectSumOfResearchPapersByFemale = `
     SELECT COUNT(DISTINCT(research_Papers.paper_title)) AS 'Sum of Papers by Female'
     FROM authors
-    JOIN research_PapersAndAuthors ON (authors.author_no = research_PapersAndAuthors.author_no)
-    JOIN research_Papers ON (research_Papers.paper_id = research_PapersAndAuthors.paper_id)
+    JOIN research_PapersAndAuthors ON authors.author_no = research_PapersAndAuthors.author_no
+    JOIN research_Papers ON research_Papers.paper_id = research_PapersAndAuthors.paper_id
     GROUP BY authors.gender
     HAVING gender = 'F';`
 
@@ -36,8 +36,8 @@ export const selectAvgOfHIndexAuthorsPerUni = `
 export const selectSumOfResearchPapersOfAuthorsPerUni = `
     SELECT authors.university AS University, COUNT(authors.author_name) AS 'Sum of Research Papers'
     FROM authors 
-    JOIN research_PapersAndAuthors ON (authors.author_no = research_PapersAndAuthors.author_no)
-    JOIN research_Papers ON (research_Papers.paper_id = research_PapersAndAuthors.paper_id)
+    JOIN research_PapersAndAuthors ON authors.author_no = research_PapersAndAuthors.author_no
+    JOIN research_Papers ON research_Papers.paper_id = research_PapersAndAuthors.paper_id
     GROUP BY authors.university
     ORDER BY authors.university;`
 

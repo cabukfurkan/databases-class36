@@ -4,7 +4,7 @@ export const createAuthors = `
         author_name VARCHAR(100),
         university VARCHAR(200),
         date_of_birth DATE,
-        h_index TEXT,
+        h_index TINYINT,
         gender ENUM ('M', 'F'),
         PRIMARY KEY (author_no));`
 
