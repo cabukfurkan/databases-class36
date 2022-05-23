@@ -2,10 +2,6 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const { seedDatabase } = require("./seedDatabase.js");
 require('dotenv').config()
 
-
-
-
-
 async function main() {
     if (process.env.MONGODB_URL == null) {
         throw Error(
@@ -20,14 +16,10 @@ async function main() {
 
     try {
         await client.connect();
-
-        // Seed our database
         await seedDatabase(client);
-
     } catch (err) {
         console.error(err);
     } finally {
-        // Always close the connection at the end
         client.close();
     }
 }
