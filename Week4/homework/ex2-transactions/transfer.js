@@ -13,11 +13,31 @@ async function transferMoney(client, sender, receiver, amount, remark) {
     try {
         const transactionResult = await session.withTransaction(async () => {
             const accountUpdateSender = await accountsCollection.updateOne({ account_number: sender },
-                { $inc: { balance: - amount } }, { session })
+                {
+                    $inc: { balance: - amount },
+                    $push: {
+                        account_changes: {
+                            change_number: { $size: "$account_changes" },
+                            amount: amount,
+                            changed_date: new Date(),
+                            remark: remark
+                        }
+                    }
+                }, { session })
             console.log(`${accountUpdateSender.matchedCount} document found in the accounts collection with the account number ${sender}`);
 
             const accountUpdateReceiver = await accountsCollection.updateOne({ account_number: receiver },
-                { $inc: { balance: + amount } }, { session })
+                {
+                    $inc: { balance: + amount },
+                    $push: {
+                        account_changes: {
+                            change_number: { $size: "$account_changes" },
+                            amount: amount,
+                            changed_date: new Date(),
+                            remark: remark
+                        }
+                    }
+                }, { session })
             console.log(`${accountUpdateReceiver.matchedCount} document found in the accounts collection with the account number ${receiver}`);
 
         }, transactionOptions)
@@ -36,7 +56,6 @@ async function transferMoney(client, sender, receiver, amount, remark) {
     }
 
 }
-
 
 module.exports = {
     transferMoney,

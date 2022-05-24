@@ -18,7 +18,9 @@ async function main() {
     try {
         await client.connect();
 
-        await transferMoney(client, 101, 102, 100)
+        await transferMoney(client, 101, 102, 100, "Grocery payment")
+        await transferMoney(client, 103, 101, 125, "Debt payment")
+
 
     } catch (err) {
         console.error(err);
