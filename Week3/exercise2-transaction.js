@@ -27,19 +27,57 @@ async function seedDatabase() {
         [7, 102, 1000, '2022-04-05 22:22:22', 'Received'],
     ];
 
-    connection.connect();
 
-    try {
-        await execQuery('START TRANSACTION');
-        await execQuery(sendMoney);
-        await execQuery(receiveMoney);
-        await execQuery(insertIntoAccountChanges, [accountOperations]);
-        await execQuery('COMMIT');
-    } catch (error) {
-        console.error(error);
-        await execQuery('ROLLBACK');
-    }
-    connection.end();
+    await connection.beginTransaction(function (err) {
+        if (err) { throw err; }
+        connection.query(`
+        UPDATE account
+        SET balance = balance - 1000
+        WHERE accountNumber = 101;`, function (error) {
+            if (error) {
+                return connection.rollback(function () {
+                    throw error;
+                });
+            }
+
+            connection.query(`
+            UPDATE account
+            SET balance = balance + 1000
+            WHERE accountNumber = 102;`, function (error) {
+                if (error) {
+                    return connection.rollback(function () {
+                        throw error;
+                    });
+                }
+            });
+            connection.query(`
+            INSERT INTO accountChanges (changeNumber, accountNumber, amount, changedDate, remark) VALUES ? ;`, [accountOperations], function (error, results, fields) {
+                if (error) {
+                    return connection.rollback(function () {
+                        throw error;
+                    });
+                }
+                connection.commit(function (err) {
+                    if (err) {
+                        return connection.rollback(function () {
+                            throw err;
+                        });
+                    }
+                    console.log('success!');
+                });
+            });
+        });
+    });
+    /*   try {
+          await execQuery('START TRANSACTION');
+          await execQuery(sendMoney);
+          await execQuery(receiveMoney);
+          await execQuery(insertIntoAccountChanges, [accountOperations]);
+          await execQuery('COMMIT');
+      } catch (error) {
+          console.error(error);
+          await execQuery('ROLLBACK');
+      } */
 }
 
 seedDatabase();
